@@ -2,10 +2,11 @@ package grafos6_futebolderobos.Grafo;
 
 import java.util.ArrayList;
 import java.util.List;
+import javafx.geometry.Point2D;
 
 public class Grafo {
 
-    private List<String> V;//conjunto de vértices
+    private List<Vertice> V;//conjunto de vértices
     private List<Aresta> E;//conjunto de duplas de vértices (arestas)
 
     public Grafo() {
@@ -17,7 +18,7 @@ public class Grafo {
         return E;
     }
 
-    public List<String> getV() {
+    public List<Vertice> getV() {
         return V;
     }
 
@@ -35,7 +36,17 @@ public class Grafo {
         }
     }
 
-    public void addVertice(int v) {
+    public void addVertice( Point2D v) {
+        boolean naoTem = true;
+        for (Vertice x : V) { //procura um vertice com as mesmas coordenadas
+            if (x.equals(v)) {
+                naoTem = false;
+                break;
+            }
+        }
+        if (naoTem) { //adiciona aresta na lista
+            V.add(new Vertice(v));
+        }
     }
 
     public void printAresta() {
