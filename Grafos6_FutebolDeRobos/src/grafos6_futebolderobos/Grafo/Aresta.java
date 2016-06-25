@@ -2,10 +2,14 @@ package grafos6_futebolderobos.Grafo;
 
 public class Aresta {
 
-    private int v1, v2, peso;
+    private Vertice v1, v2;
+    private double peso;
 
-    public Aresta(int v1, int v2, int peso) {
-        if (v1 < v2) {
+    public Aresta(Vertice v1, Vertice v2, double peso) {
+        if (v1.compareTo(v2) == 0) {
+            throw new IllegalArgumentException("Os vértices não podem ser iguais!");
+        }
+        if (v1.compareTo(v2) == -1) {
             this.v1 = v1;
             this.v2 = v2;
         } else {
@@ -15,22 +19,28 @@ public class Aresta {
         this.peso = peso;
     }
 
-    public int getV2() {
+    public Vertice getV1() {
+        return v1;
+    }
+
+    public Vertice getV2() {
         return v2;
     }
 
-    public int getV1() {
-        return v1;
+    public double getPeso() {
+        return peso;
     }
-    public boolean compareTo(int v1, int v2){
-        if((this.v1==v1 && this.v2==v2) || (this.v1==v2 && this.v2==v1))
+
+    public boolean hasThisEdges(Vertice v1, Vertice v2) {
+        if (this.v1.equals(v1) && this.v2.equals(v2) || this.v1.equals(v2) && this.v2.equals(v1)) {
             return true;
+        }
         return false;
     }
 
     @Override
     public String toString() {
-        return "(" + v1 + "," + v2 + ")";
+        return "(" + v1 + ";" + v2 + ")";
     }
 
 }
