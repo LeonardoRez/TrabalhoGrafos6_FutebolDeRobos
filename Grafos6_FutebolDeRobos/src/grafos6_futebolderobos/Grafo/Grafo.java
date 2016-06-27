@@ -49,7 +49,10 @@ public class Grafo {
         }
     }
 
-    public void printAresta() {
+    public void printArestas() {
+        for(Aresta a: E){
+            System.out.println(a.toString());
+        }
     }
 
 }
