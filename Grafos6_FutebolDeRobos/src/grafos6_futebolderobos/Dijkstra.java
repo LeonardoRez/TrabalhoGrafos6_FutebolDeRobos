@@ -24,7 +24,7 @@ public class Dijkstra {
     double[][] mp; //matriz com os pesos
     Grafo g;
     int quant;
-
+    int dest;
     //classe que encontra o menor caminho
     public Dijkstra(Grafo g) {
         this.g = g;
@@ -33,7 +33,7 @@ public class Dijkstra {
         mp = new double[g.quantV()][g.quantV()];
         int t = 0;
         for (Vertice v : g.getV()) {
-            lista[t++] = new ColunaCaminho(v, -1);
+            lista[t++] = new ColunaCaminho(v, 99999999);
         }
         for (int i = 0; i < g.quantV(); i++) {
 //            System.out.print("[ ");
@@ -43,8 +43,8 @@ public class Dijkstra {
             }
 //            System.out.print("]\n");
         }
-        printMatriz();
-        printLista();
+       // printMatriz();
+       // printLista();
     }
 
     public void menorCaminho(Vertice o, Vertice dest) {
@@ -68,6 +68,8 @@ public class Dijkstra {
 
     public void menorCaminho(int o, int dest) {
         lista[o].c = 0;
+        lista[dest].e = true;
+        this.dest = dest;
         expandir(o);
         while (hasNaoExpandido(dest)) {
             int ind = menorCustoNaoExp();
@@ -89,22 +91,24 @@ public class Dijkstra {
             System.out.println(lista[i].ID.toString());
             return;
         }
-        System.out.print(lista[i].ID.toString()+"<-");
+        System.out.print(lista[i].ID.toString() + "<-");
         backTrack(getIndice(lista[i].og));
     }
 
     public int menorCustoNaoExp() {//menor custo ainda nao expandido
         double menor = 999999999;
-        for(ColunaCaminho c: lista){
-            if(!(c.e)){
-                if(c.c > 0)
+        int aux = -1;
+        for (ColunaCaminho c : lista) {
+            if (!(c.e)) {
+                if (c.c > 0) {
                     menor = c.c;
+                    break;
+                }
             }
         }
-        int aux = -1;
         for (int i = 0; i < lista.length; i++) {
             if (!(lista[i].e)) {
-                if (menor > lista[i].c) {
+                if (menor >= lista[i].c && lista[i].c >= 0) {
                     menor = lista[i].c;
                     aux = i;
                 }
@@ -121,17 +125,17 @@ public class Dijkstra {
 //            }
 //        }
 
-        System.out.println("EXPANDINDO "+ lista[posV].ID.toString());
+        System.out.println("EXPANDINDO " + lista[posV].ID.toString());
 
         if (posV < lista.length && posV >= 0) {
             lista[posV].e = true; //marcando como expandido
             for (int i = 0; i < lista.length; i++) { //procurando outros vertices
-                if (!lista[i].e) { //que ainda nao foram expandidos
+                if (!lista[i].e || i == dest) { //que ainda nao foram expandidos
                     double custo = mp[posV][i];
-                    if (custo > 0 && (custo < lista[i].c || lista[i].c == -1)) {
+                    if (custo > 0 && ((custo+lista[posV].c) < lista[i].c)) {
                         lista[i].c = custo + lista[posV].c;
                         lista[i].og = lista[posV].ID;
-                        System.out.println("vertice: "+lista[i].ID.toString()+", custo: "+lista[i].c);
+                        System.out.println("vertice: " + lista[i].ID.toString() + ", custo: " + lista[i].c);
                     }
                 }
             }
@@ -187,9 +191,9 @@ public class Dijkstra {
         g.addAresta(g.getV().get(0), g.getV().get(2), 1);
         g.addAresta(g.getV().get(0), g.getV().get(3), 22);
         g.addAresta(g.getV().get(1), g.getV().get(3), 6);
-        g.addAresta(g.getV().get(2), g.getV().get(3), 20);
+        g.addAresta(g.getV().get(2), g.getV().get(3), 4);
         g.addAresta(g.getV().get(3), g.getV().get(4), 2);
         Dijkstra d = new Dijkstra(g);
-        d.menorCaminho(g.getV().get(0),g.getV().get(3));
+        d.menorCaminho(g.getV().get(1), g.getV().get(2));
     }
 }
