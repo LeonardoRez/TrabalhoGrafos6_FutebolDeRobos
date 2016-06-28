@@ -36,7 +36,29 @@ public class Grafo {
         }
     }
 
-    public void addVertice( Point2D v) {
+    public double getPesoAresta(Vertice v1, Vertice v2) {
+        if (hasAresta(v1, v2)) {
+            for (Aresta a : E) {
+                if (a.getV1().getID() == v1.getID() && a.getV2().getID() == v2.getID() || a.getV1().getID() == v2.getID() && a.getV2().getID() == v1.getID()) {
+                    return a.getPeso();
+                }
+            }
+            return -2;
+        } else {
+            return -1;
+        }
+    }
+
+    public boolean hasAresta(Vertice v1, Vertice v2) {
+        for (Aresta x : E) { //procura uma aresta com esses vértices
+            if (x.hasThisEdges(v1, v2)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void addVertice(Point2D v) {
         boolean naoTem = true;
         for (Vertice x : V) { //procura um vertice com as mesmas coordenadas
             if (x.equals(v)) {
@@ -50,9 +72,13 @@ public class Grafo {
     }
 
     public void printArestas() {
-        for(Aresta a: E){
+        for (Aresta a : E) {
             System.out.println(a.toString());
         }
+    }
+
+    public int quantV() {
+        return V.size();
     }
 
 }
